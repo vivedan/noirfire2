@@ -1,0 +1,892 @@
+body {
+    margin: 0;
+    background: black;
+}
+
+
+html {
+  font-size: 16px;
+}
+
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#gradient1 {
+  position: absolute;
+  z-index: -1000;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(rgba(70, 250, 244, 1), rgba(245, 66, 239, 1));
+  opacity: 0.3;
+}
+
+#logoEnterFirst {
+  position:relative;
+  z-index: 2999;
+  width: 45vw;
+  height: 18vh;
+}
+
+#arrowContainer {
+  position: relative;
+  z-index: -1;
+}
+
+.shortArrow {
+  position: relative;
+  height: 2vw;
+  width: auto;
+  z-index: -1;
+}
+
+#longArrow {
+  position: relative;
+  height: 2vw;
+  width: auto;
+  z-index: -1;
+}
+
+/*#videoButton {
+  position: absolute; 
+  z-index: 1000;
+  opacity: 1;
+  background: linear-gradient(to right, #03f4fc, #f803fc);
+  box-shadow: 2px 5px #f542f2;
+  border-radius: 25px;
+  border-style: solid;
+  border-color: #e0e0e0;
+  font-size: 15px;
+  font-family: 'Lato';
+  left: 20vw;
+  width: 15vh;
+  padding: 7px;
+  color: white;
+  transition: background 1s, box-shadow 0.5s;
+}*/
+
+#videoButton {
+  position: absolute; 
+  z-index: 2000;
+  opacity: 1;
+  background: transparent;
+  border-style: none;
+  font-size: 1.4vw;
+  font-family: 'Lato';
+  left: 25vw;
+  width: 15vh;
+  height: 2vw;
+  color: white;
+  outline: none;
+}
+
+#videoButton:hover {
+  cursor: pointer;
+  
+}
+
+/*#videoButton:hover + #gradient1 {
+  background: radial-gradient(rgba(70, 250, 244, 1), rgba(245, 66, 239, 1));
+  display: block;
+}*/
+
+#enterUpper {
+  display: flex;
+  align-items: center;
+}
+
+#descriptionEnter {
+  width: 550px;
+}
+
+
+#enterParty {
+  position: absolute; 
+  z-index: 1000;
+  opacity: 1;
+  background: linear-gradient(to right, #03f4fc, #f803fc);
+  box-shadow: 2px 5px #f542f2;
+  border-radius: 25px;
+  border-style: solid;
+  border-color: #e0e0e0;
+  font-size: 1rem;
+  font-family: 'Lato';
+  width: 22vh;
+  padding: 7px;
+  color: white;
+  transition: background 1s, box-shadow 0.5s;
+}
+
+#enterParty:hover {
+  cursor: pointer;
+}
+
+
+#enterOverlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  visibility: visible;
+  background-color: black;
+  z-index: 7000;
+  opacity: 1;
+  transition: opacity 2s linear;
+}
+
+#enterMenu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: inherit;
+  height: inherit;
+}
+
+#enter {
+  position:absolute;
+  z-index:2000;
+  display:flex;
+  width: 80vw;
+  height: 80vh;
+  left: 10vw;
+  top: 10vh;
+  align-items: center;
+  background-image: url("https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fbackground-06_2.png?v=1603652037988");
+  background-size: cover;
+  opacity: 0.8;
+
+}
+
+
+
+#enterBack {
+  position:absolute;
+  width: inherit;
+  height: inherit;
+  z-index: 2000;
+  opacity: 0.9;
+  
+}
+
+#enterName {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.enterContent {
+  position:relative;
+  z-index: 3000;
+  
+}
+
+#logoEnter {
+  position:relative;
+  z-index: 2999;
+  width: auto;
+  height: 20vh;
+}
+
+#subtitle {
+  position: relative;
+  height: 120px;
+  width: auto;
+  left: 10vw;
+}
+
+
+/*#instructions {
+  position: relative;
+  display: grid;
+  grid-template-columns: 5vw 20vw 5vw 20vw 5vw 20vw;
+  align-items: center;
+}*/
+
+#instructions {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-content: center;
+  width: inherit;
+}
+
+.instructionInline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  
+}
+
+.iconEnter {
+  position: relative;
+  width: 80px;
+  height: auto;
+}
+
+.textInstruction {
+  position: relative;
+  width: 300px;
+  height: auto;
+}
+
+#exit {
+  position: absolute;
+}
+
+#exitOverlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  visibility: hidden;
+  background-color: black;
+  z-index: 7000;
+  opacity: 0;
+  transition: opacity 2s linear;
+}
+
+.fadeIn {
+  opacity: 0;
+}
+
+p {
+  color: white;
+  letter-spacing: 1px;
+  line-height: 20px;
+  z-index: 4000;
+  font-family: 'Lato';
+  font-size: 1rem;
+  
+}
+
+h1 {
+  color: white;
+  letter-spacing: 5px;
+}
+
+/*#myButton {
+  position: relative;
+  opacity: 0.5;
+  top: 7px;
+  left: 7px;
+  padding: 5px;
+}*/
+
+#title {
+  position: relative;
+  font-size: 50px;
+  font-family: 'Orbitron';
+  background: -webkit-linear-gradient(#03f4fc, #f803fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+}
+
+#subtitle {
+  position: relative;
+  font-size: 20px;
+  font-family: 'Press Start 2P', cursive;
+  background: -webkit-linear-gradient(#03f4fc, #f803fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+}
+
+
+
+#firstUsername {
+  opacity: 0.8;
+  background: white;
+  border-radius: 25px;
+  border-style: solid;
+  border-color: black;
+  border-width: 3px;
+  color: black;
+  font-size: 15px;
+  font-family: 'Lato';
+  width: 25vh;
+  padding: 7px;
+  margin: 50px 5px;
+  transition: font-weight 0.5s, box-shadow 0.5s;
+
+}
+
+/*#enterName::after {
+  content: "Username should be at least 3 characters long";
+  color: #03f4fc;
+  position: absolute;
+  font-family: 'Poiret One';
+  font-size: 10px;
+  left: 17.7vw;
+  top: 55vh;
+  display: none;
+  
+}*/
+
+
+
+
+#enterButton {
+  opacity: 0.8;
+  background: webkit-linear-gradient(#03f4fc, #f803fc);
+  border-radius: 30px;
+  border-style: solid;
+  border-color: black;
+  border-width: 3px;
+  box-shadow: -5px 5px black;
+  font-size: 15px;
+  font-family: 'Lato';
+  width: 15vh;
+  padding: 7px;
+  margin: 50px 5px;
+  transition: background 1s, box-shadow 0.5s, opacity: 0.4s;
+  z-index: 5000;
+  
+}
+
+#enterButton:hover {
+  opacity: 1;
+}
+
+#firstUsername:focus + #enterButton{
+  opacity: 1;
+  background: linear-gradient(to right, #03f4fc, #f803fc);
+  box-shadow: 2px 5px #f542f2;
+}
+
+#firstUsername:focus{
+  font-weight: 700;
+  box-shadow: 0px 0px 100px #f542f2;
+}
+
+.instaLogo {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 40px;
+  height: 40px;
+  z-index: 80000;
+}
+
+
+
+/* SCENE */
+
+#mainCont {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+#scene {
+  position: absolute; 
+  z-index: 0;
+}
+
+#ingameUItop {
+  position: relative;
+  z-index: 1000; 
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#topLeft {
+  display: flex;
+  align-items: center;
+}
+
+#ingameUIbottom {
+  position: absolute;
+  z-index: 1000; 
+  display: none;
+  justify-content: space-between;
+  bottom: 0px;
+  width: 100vw;
+}
+
+
+.input {
+  position: relative;
+  opacity: 0.5;
+  background: transparent;
+  top: 0px;
+  border-style: solid;
+  border-color: transparent transparent #e0e0e0;
+  font-family: 'Lato';
+  width: 200px;
+  height: 22px;
+  padding: 3px;
+  color: white;
+  outline: none;
+
+}
+
+
+/*.button {
+  opacity: 0.5;
+  color: white;
+  background: transparent;
+  border-radius: 25px;
+  border-style: solid;
+  border-color: #e0e0e0;
+  padding: 5px;
+
+}
+
+.button:hover {
+  background: white;
+  color: black;
+}*/
+
+.ingameIcon {
+  position: relative;
+  width: auto;
+  height: 23px;
+  padding: 5px;
+}
+
+.UIbutton {
+  position: relative;
+  opacity: 0.6;
+  background-color: rgba(102, 102, 102, 0.7);
+  color: white;
+  border: 0;
+  outline: none;
+  height: 22px;
+  border-radius: 7px;
+  font-size: 10px;
+  font-family: 'Lato';
+  transition: opacity 0.2s;
+}
+
+.UIbutton:hover {
+  opacity: 0.9;
+}
+
+#userName {
+  position: relative;
+  width: 150px;
+  transition: display 1s;
+}
+
+#userName:focus {
+  font-weight: bold;
+}
+
+
+#userName:focus + #changeButton {
+  opacity: 1;
+  background: linear-gradient(to right, #03f4fc, #f803fc);
+  box-shadow: 2px 3px #f542f2;
+
+}
+
+
+#chatDiv {
+  position: relative;
+  display: flex;
+  justify-self: flex-start;
+  justify-content: center;
+}
+
+#chatIcon {
+  position: relative;
+  top: -2px;
+}
+
+#chatBox {
+  opacity: 0.7;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: 7px;
+  background: rgba(102, 102, 102, 0.2);
+  color: white;
+}
+
+#portalMessage {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 1px;
+  color: white;
+  opacity: 0.7;
+  animation-duration: 2s;
+  animation-name: changeopacity;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  
+}
+
+@keyframes changeopacity {
+  from {
+    opacity: 0.7;
+  }
+
+  to {
+    opacity: 0.1;
+  }
+}
+
+#bottomCorner {
+  position: absolute;
+  display: inline;
+  width: 10vw;
+  justify-self: flex-end;
+  right: 0px;
+}
+
+#bottomUsername {
+  position: relative;
+  display: inline;
+  font-family: 'Lato';
+  top: -10px;
+  left: 3px;
+  letter-spacing: 4px;
+  font-style: italic;
+  font-weight: 300;
+}
+
+#ingameLogo {
+  position: absolute;
+  left: 0px;
+  top: -80px;
+  left: -10px;
+  width: 10vw;
+  height: auto;
+  opacity: 0.3;
+}
+
+#FSbutton {
+  margin-left: 1vw;
+  z-index: 5000;
+  background-color: transparent;
+  
+}
+
+
+/*#toggleFS {
+  content: "Toggle Fullscreen Mode";
+  color: white;
+  font-size: 11px;
+  font-family: 'Lato';
+  padding: 7px;
+  opacity: 0.5;
+  display: none;
+}
+
+#FSbutton:hover + #toggleFS {
+  display: inline;
+}*/
+
+#topLeft {
+  position: relative;
+}
+
+#VRButton {
+  position: relative;
+  width:50px;
+  height: auto;
+  display: inline;
+  justify-self: flex-end;
+  margin: 7px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+#VRButton:hover {
+  opacity: 0.8;
+}
+
+#flybutton {
+  left: 10px;
+  opacity: 0;
+}
+#flybutton:hover {
+  opacity: 1;
+  background: linear-gradient(to right, #03f4fc, #f803fc);
+  box-shadow: 2px 5px #f542f2;
+}
+
+
+[data-tooltip]:before {
+    /* needed - do not touch */
+    content: attr(data-tooltip);
+    position: absolute;
+    opacity: 0;
+    z-index: 2000;
+    
+    /* customizable */
+    transition: all 0.15s ease;
+    padding: 10px;
+    color: #333;
+    border-radius: 10px;
+    box-shadow: 2px 2px 1px silver;    
+}
+
+[data-tooltip]:hover:before {
+    /* needed - do not touch */
+    opacity: 1;
+    z-index: 2000;
+    
+    /* customizable */
+    background: yellow;
+    margin-top: 0px;
+    margin-left: 0px;    
+}
+
+
+
+/* Tablet Landscape  */
+@media screen and (max-width: 1060px) {
+     
+}
+/*Tabled Portrait */
+@media screen and (max-width: 512px) {
+  
+  #enterMenu {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  
+  p {
+    font-size: 0.5rem;
+  }
+  
+  #instructions {
+    flex-direction: column;
+    width: auto;
+  }
+  
+  .instructionInline {
+    height: 8vh;
+  }
+  
+  .textInstruction {
+    object-fit: cover;
+  }
+  
+  .iconEnter {
+    position: relative;
+    width: 40px;
+    height: auto;
+    justify-self: center;
+    padding: 0px;
+  }
+  
+  #logoEnter {
+    position:relative;
+    z-index: 2999;
+    width: 300px;
+    height: auto;
+    justify-self: center;
+    left: 0;
+    
+  }
+  
+  .instaLogo {
+    
+    bottom: 15vh;
+  }
+  
+  #enter {
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+  }
+  
+  #enterUpper {
+    flex-direction: column;
+  }
+  
+  #descriptionEnter {
+    width: 120vw;
+  }
+  
+  #bottomCorner {
+  position: absolute;
+  display: inline;
+  top: -10vh;
+  width: 20vh;
+  left: 80vw;
+  justify-self: flex-end;
+  align-self: center;
+  transform: rotate(90deg);
+}
+
+#bottomUsername {
+  position: relative;
+  display: inline;
+  font-family: 'Lato';
+  top: 0;
+  left: 3px;
+  letter-spacing: 4px;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1rem;
+}
+
+#ingameLogo {
+  position: absolute;
+  left: -15vh;
+  top: 2vh;
+  width: 15vh;
+  height: auto;
+  opacity: 1;
+  
+}
+  
+  #firstUsername {
+    margin: 10px 5px;
+  }
+  
+  #enterButton {
+    margin: 10px 5px;
+  }
+  
+  #portalMessage {
+    bottom: 30px;
+    width: 70vw;
+  }
+  
+}
+
+@media screen and (max-width: 1060px) and (orientation: landscape) {
+  
+  #enter {
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+  }
+  
+  #enterMenu {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  
+  p {
+    font-size: 0.6rem;
+  }
+  
+  #instructions {
+    
+  }
+  
+  .instructionInline {
+    width: 25vw;
+  }
+  
+  .textInstruction {
+    width: 25vw;
+  }
+  
+  .iconEnter {
+    position: relative;
+    width: 40px;
+    height: auto;
+    justify-self: center;
+    padding: 0px;
+  }
+  
+  #logoEnter {
+    position:relative;
+    z-index: 2999;
+    width: 300px;
+    height: auto;
+    justify-self: center;
+    left: 5vw;
+    top: 10vh;
+  }
+  #descriptionEnter {
+    width: 65vw;
+  }
+  
+  #firstUsername {
+    width: 40vh;
+    margin: 10px 5px;
+  }
+  
+  #enterButton {
+    width: 30vh;
+    margin: 10px 5px;
+  }
+  
+  
+  #instaLogo {
+    position: absolute;
+    top: 82vh;
+    left: 80vw;
+    bottom: 5vh;
+    width: 5vw;
+    height: auto;
+  }
+  
+  
+  
+  #ingameUIbottom {
+    top: 75vh;
+  }
+  
+  #portalMessage {
+    right: 10px;
+  }
+  
+  #bottomCorner {
+  position: absolute;
+  display: inline;
+  top: -20vh;
+  width: 40vh;
+  left: 85vw;
+  justify-self: flex-end;
+  align-self: center;
+  transform: rotate(90deg);
+}
+
+#bottomUsername {
+  position: relative;
+  display: inline;
+  font-family: 'Lato';
+  top: -2vh;
+  left: 3px;
+  letter-spacing: 4px;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1rem;
+}
+
+#ingameLogo {
+  position: absolute;
+  left: -25vh;
+  top: 3vh;
+  width: 25vh;
+  height: auto;
+  opacity: 1;
+  
+}
+  
+  #chatDiv {
+    align-self: flex-end;
+  }
+  
+}

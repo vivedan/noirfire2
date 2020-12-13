@@ -1,0 +1,968 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>N01R - Fire</title>
+    <meta name="description" content="N01R - An immersive neo-party" />
+
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="https://cdn.glitch.com/60e19993-0614-48b3-9be5-69649f6f5b68%2Ffic.png?v=1593614453706"
+    />
+
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+    <script src="easyrtc/easyrtc.js"></script>
+    <script src="https://unpkg.com/networked-aframe@^0.6.0/dist/networked-aframe.min.js"></script>
+
+    <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.5/dist/aframe-particle-system-component.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+
+    <script src="/js/spawn-in-circle.component.js"></script>
+    <script src="/js/update-rate.component.js"></script>
+
+    <script src="https://cdn.rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>
+    <script src="https://rawgit.com/mayognaise/aframe-gif-shader/master/dist/aframe-gif-shader.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="HandheldFriendly" content="true" />
+
+    <!--<script>
+      
+      AFRAME.registerComponent('auto-mute', {
+        schema: {},
+        init: function () {
+          let button = document.getElementById("myButton");
+          let icon = document.getElementById("muteIcon");
+          let audiortc = 0;
+          easyrtc.enableMicrophone(false);
+          console.log(audiortc);
+          button.innerHTML = "Unmute";
+          icon.src =
+            "https://cdn.glitch.com/0e65d536-0425-4e6e-8059-1247674b938e%2Ficon-mute.png?v=1592505880753";
+        }
+        
+      });
+      
+    </script>-->
+
+    <script>
+      AFRAME.registerComponent("position-reader", {
+        /**
+         * We use IIFE (immediately-invoked function expression) to only allocate one
+         * vector or euler and not re-create on every tick to save memory.
+         */
+
+        init: function() {
+          // Set up the tick throttling.
+          this.tick = AFRAME.utils.throttleTick(this.tick, 4000, this);
+        },
+
+        tick: function() {
+          let yPos = this.el.object3D.position.y;
+
+          console.log(yPos);
+
+          if (yPos > 110) {
+            setTimeout(myclose, 5000);
+            console.log("closing in 5");
+          }
+
+          function myclose() {
+            window.close();
+          }
+        }
+      });
+    </script>
+
+    <script>
+      AFRAME.registerComponent("random-avatar", {
+        schema: {},
+
+        init: function() {
+          let av1 =
+            "https://cdn.glitch.com/e1ded323-c71c-45ea-ac7d-80b787abaaef%2Favatar.glb?v=1601057091379";
+          let av2 =
+            "https://cdn.glitch.com/e1ded323-c71c-45ea-ac7d-80b787abaaef%2Favatar2.glb?v=1601059578143";
+          let av3 =
+            "https://cdn.glitch.com/e1ded323-c71c-45ea-ac7d-80b787abaaef%2Favatar3.glb?v=1601059578478";
+          var avatars = [av1, av2, av3];
+
+          var randomSrc = avatars[Math.floor(Math.random() * avatars.length)];
+
+          this.el.setAttribute("gltf-model", randomSrc);
+        }
+      });
+    </script>
+
+    <script>
+      AFRAME.registerComponent("collision-trigger", {
+        schema: {},
+
+        init: function() {
+          this.el.addEventListener("stateadded", event => {
+            console.log("comienzo colision");
+            console.log(event.detail);
+            let port = event.detail;
+            let overlay = document.querySelector('#exitOverlay');
+            
+            switch (port) {
+                case "wood":
+                  overlay.style.visibility = "visible";
+                  overlay.style.opacity= '1';
+                  window.setTimeout(function(){window.open("https://noir-mdwi7.ondigitalocean.app/woods.html", "_self")}, 2000);
+                  
+                  break;
+                case "fire":
+                  overlay.style.visibility = "visible";
+                  overlay.style.opacity= '1';
+                  window.setTimeout(function(){window.open("/fire.html", "_self")}, 2000);
+              
+                  break;
+              }
+
+            /*this.el.addEventListener("hitend", e => {
+              console.log("fin colision");
+              switch (port) {
+                case "col1":
+                  window.open("/underwater.html", "_self");
+                  break;
+                case "col2":
+                  window.open("/woods.html", "_self");
+                  break;
+              }*/
+            });
+          
+        }
+      });
+    </script>
+
+    <script>
+      AFRAME.registerComponent("radio-streaming", {
+        schema: {},
+
+        init: function() {
+          let button = document.getElementById("enterButton");
+          button.addEventListener("click", radioStream);
+
+          var el = this.el;
+          var i;
+          var sceneEl = this.el.sceneEl;
+          var self = this;
+          var sound;
+          var radioEmitter = this.el.getObject3D("mesh");
+          console.log(radioEmitter);
+
+          function radioStream() {
+            //TAKEN FROM AFRAME SOUND COMPONENT
+
+            // Only want one AudioListener. Cache it on the scene.
+            var listener = (this.listener =
+              sceneEl.audioListener || new THREE.AudioListener());
+            sceneEl.audioListener = listener;
+
+            if (sceneEl.camera) {
+              sceneEl.camera.add(listener);
+            }
+
+            // Wait for camera if necessary.
+            sceneEl.addEventListener("camera-set-active", function(evt) {
+              evt.detail.cameraEl.getObject3D("camera").add(listener);
+            });
+
+            //MINE
+
+            var audioElement = document.getElementById("music");
+            audioElement.play();
+
+            /*var stream = new MediaStream("https://cdn.glitch.com/7a6793a5-b8c7-43cd-a82b-b98449c54afd%2FGROUP5.mp3?v=1601211078144");*/
+
+            var positionalAudio = new THREE.PositionalAudio(listener);
+            positionalAudio.setMediaElementSource(audioElement);
+            /*positionalAudio.setMediaStreamSource(stream);*/
+            positionalAudio.setVolume(1.3);
+            positionalAudio.setRefDistance(10);
+            positionalAudio.setRolloffFactor(5);
+            //positionalAudio.setDirectionalCone(180, 230, 0.1);
+
+            /*var helper = new PositionalAudioHelper(positionalAudio, 0.1);
+      positionalAudio.add(helper);*/
+
+            radioEmitter.add(positionalAudio);
+          }
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <audio
+      loop
+      id="music"
+      preload="auto"
+      style="display: none"
+      src="https://cors-anywhere.herokuapp.com/http://209.97.181.143/stream2"
+      crossorigin="anonymous"
+    ></audio>
+    <div id="mainCont">
+      <div id="scene">
+        <a-scene
+          vr-mode-ui="enterVRButton: #VRButton"
+          networked-scene="
+      room: audio;
+      adapter: easyrtc;
+      audio: true;
+      debug: true;
+    "
+          update-rate
+        >
+          <a-assets>
+            <img
+              id="grid"
+              src="https://img.gs/bbdkhfbzkk/stretch/https://i.imgur.com/25P1geh.png"
+              crossorigin="anonymous"
+            />
+            <img
+              id="sky"
+              src="https://cdn.glitch.com/e1ded323-c71c-45ea-ac7d-80b787abaaef%2Feqgradient01.png?v=1601058136427"
+              crossorigin="anonymous"
+            />
+
+            <a-asset-item
+              id="portal1"
+              src="https://cdn.glitch.com/e1ded323-c71c-45ea-ac7d-80b787abaaef%2Fportal01.glb?v=1601139033879"
+              crossorigin="anonymous"
+            ></a-asset-item>
+
+            <a-asset-item
+              id="fire1"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ffireroom2.glb?v=1602341145850"
+              crossorigin="anonymous"
+            ></a-asset-item>
+            
+            <a-asset-item
+              id="crystals"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fcrystalsfire.glb?v=1603812028538"
+              crossorigin="anonymous"
+            ></a-asset-item>
+            
+            
+            
+            
+            <!--MUSIC-->
+            
+            <audio
+              id="audio1"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2FBurning%20Fire%20Places%20Sound.mp3?v=1604157771496"
+            ></audio>
+            <audio
+              id="audio2"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2FWood%20Fire%20-%20No%20Copyright%20Sound%20Effects%20-%20Audio%20Library%20(1).mp3?v=1604157775500"
+            ></audio>
+            
+            <audio
+              id="fireaudio"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ffire%20portal.mp3?v=1604240453777"
+            ></audio>
+            
+            <audio
+              id="woodaudio"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fwood%20portal.mp3?v=1604240454571"
+            ></audio>
+
+            <!-- Templates -->
+
+            <!-- Avatar -->
+            <template id="player-template">
+              <a-entity></a-entity>
+            </template>
+
+            <template id="head-template">
+              <a-entity
+                class="avatar"
+                networked-audio-source="refDistance: 5; rolloffFactor: 2"
+              >
+                <a-entity class="camRig">
+                  <a-entity
+                    position="0 -1.6 0"
+                    rotation="0 90 0"
+                    random-avatar
+                    scale="1 1.3 1"
+                  ></a-entity>
+                  <a-entity
+                    class="nametag"
+                    text="value: you; align: center; width: 10; color: black"
+                    position="0 0.9 0"
+                    rotation="0 180 0"
+                  ></a-entity>
+                  <a-entity
+                    class="chattext"
+                    text="value: you; align: center; width: 3"
+                    position="0 0.7 0"
+                    rotation="0 180 0"
+                  ></a-entity>
+                </a-entity>
+              </a-entity>
+            </template>
+
+            <!-- /Templates -->
+
+          </a-assets>
+
+          <a-entity
+            id="player"
+            networked="template:#player-template;attachTemplateToLocal:false;"
+            movement-controls="speed: 0.2; fly: true"
+            spawn-in-circle="radius:3;"
+            position="-60 1.3 0"
+            rotation="0 0 0"
+          >
+            <a-entity
+              id="avatar"
+              networked="template:#head-template;attachTemplateToLocal:false;"
+              camera="userHeight: 1.6"
+              look-controls
+              position="0 1.6 0"
+            >
+              <a-entity class="avatar" networked-audio-source></a-entity>
+              <a-sphere
+                id="playerCollider"
+                visible="false"
+                scale="0.3 0.3 0.3"
+                collision-trigger
+              ></a-sphere>
+              <a-entity class="nametag" text="value: "></a-entity>
+              <a-entity class="chattext" text=""></a-entity>
+            </a-entity>
+          </a-entity>
+
+          <a-entity
+            light="color: white; intensity: 2; type: ambient;"
+            visible=""
+            position="0 6 0"
+          ></a-entity>
+
+          <!--<a-entity
+            light="type: point;
+                       color:#db6eff;
+                       intensity: 5;
+                       distance: 15"
+            position="0 0 50"
+          ></a-entity>
+
+          <a-entity
+            light="type: point;
+                       color:#6efaff;
+                       intensity: 5;
+                       distance: 25"
+            position="-20 7.5 1"
+          ></a-entity>-->
+
+          <a-sky
+            src="#sky"
+            rotation="0 -90 0"
+            segments-height="10"
+            segments-width="16"
+          ></a-sky>
+          <a-entity id="particles" particle-system="preset: snow; color: #ff0000"></a-entity>
+
+          
+
+          <a-entity
+            id="coralEnv"
+            gltf-model="#fire1"
+            position="0 1.6 0"
+            scale="2 2 2"
+            rotation="270 0 0"
+          ></a-entity>
+          
+          
+          <a-entity
+            id="radio"
+            
+            position="75 0 0"
+            
+          ><a-sphere visible="false" radio-streaming></a-sphere><a-entity gltf-model="#crystals" scale="8 8 8"></a-entity>
+          </a-entity>
+          
+          <a-entity gltf-model="#crystals" scale="4 4 4" position="75 2 -40">
+          <a-sphere
+              radius="10"
+              
+              visible="false"
+              sound="src: #audio1; 
+                    autoplay: true;
+                    volume: 0.5;
+                    loop: true;
+                    refDistance: 60;
+                    rolloffFactor: 5"
+            >
+            </a-sphere></a-entity>
+          
+          <a-entity gltf-model="#crystals" scale="4 4 4" position="75 2 40">
+          <a-sphere
+              radius="10"
+              
+              visible="false"
+              sound="src: #audio2; 
+                    autoplay: true;
+                    volume: 0.5;
+                    loop: true;
+                    refDistance: 60;
+                    rolloffFactor: 5"
+              
+            >
+            </a-sphere></a-entity>
+          
+           <!--PORTALWOOD-->
+          
+                    
+          <a-entity position="29 22 21" rotation="20 25 -20">
+            <a-entity animation="property: rotation; to: 360 0 0; loop: true; dur: 30000">
+            <a-entity geometry="primitive: plane" 
+                      material="src: https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2FWood.png?v=1603798287641; alphaTest: 0.5; transparent: true; side: double" 
+                      scale="15 15 15" 
+                      rotation="0 -90 0"></a-entity>
+              </a-entity>
+          </a-entity>
+        <a-sphere
+          class="ports"
+          id="port1"
+          visible="false"
+          scale="0.1 4 4"
+          position="29 22 21" rotation="20 25 -20" 
+          sphere-collider="objects: #playerCollider; state: wood; radius: 0.5"
+                  sound="src: #woodaudio; 
+                    autoplay: true;
+                    volume: 3;
+                    loop: true;
+                    refDistance: 3;
+                    rolloffFactor: 5"
+          ></a-sphere>
+          <!--<a-entity
+            light="type: point;
+                       color: white;
+                       intensity: 5;
+                       distance: 7"
+            position="35 28 21"
+          ></a-entity>-->
+          
+          
+        </a-scene>
+      </div>
+
+      <div id="ingameUItop">
+        <!--<button id="myButton">Mute!</button> -->
+        <div id="topLeft">
+          <img
+            class="ingameIcon"
+            id="muteIcon"
+            src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fmaikefeng-jingyin-2.png?v=1603802144461"
+            crossorigin="anonymous"
+          />
+          <button class="UIbutton" id="myButton" onclick="toggleMic()">
+            Mute
+          </button>
+          <img
+            class="ingameIcon"
+            id="bottopIcon"
+            src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fuser%20icon.png?v=1603642469867"
+            crossorigin="anonymous"
+          />
+          <input
+            class="input"
+            id="userName"
+            placeholder="Write your new Username here!"
+            style="display: none"
+          />
+          <button class="UIbutton" id="changeButton" onclick="changeUsername()">
+            Change Username
+          </button>
+        </div>
+        <img
+          id="VRButton"
+          class="ingameIcon"
+          title="Enter VR Mode"
+          src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2FVR.png?v=1603642471053"
+          crossorigin="anonymous"
+        />
+      </div>
+
+      <div id="ingameUIbottom">
+        <div id="chatDiv">
+          <img
+            class="ingameIcon"
+            id="chatIcon"
+            src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fchat%20icon.png?v=1603642470653"
+            crossorigin="anonymous"
+          />
+          <input class="input" id="chatBox" placeholder="Here to chat!" />
+          <button class="UIbutton" onclick="sendMessage()">
+            Send
+          </button>
+
+          <img
+            id="FSbutton"
+            class="UIbutton"
+            title="Enter Fullscreen Mode"
+            src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ffullscreen.png?v=1603642470542"
+            onclick="toggleFullScreen()"
+            crossorigin="anonymous"
+          />
+          <!--<p id="toggleFS">
+            Toggle Fullscreen Mode
+          </p>-->
+          <!--<img
+            id="flybutton"
+            class="UIbutton"
+            title="Toggle Fly Mode"
+            src="https://cdn.glitch.com/7d891b71-2ddb-4312-834c-61fd5d15488c%2FFly2.png?v=1593781464606"
+            onclick="fly()"
+            crossorigin="anonymous"
+          />-->
+          <!--<input
+            class="input"
+            id="chatCenter"
+            placeholder="Here to message everybody!"
+          />
+          <button class="UIbutton" onclick="sendMessageCenter()">
+            SPAM THOSE MOTHERFUCKERS
+          </button>-->
+        </div>
+        <div id="bottomCorner">
+          <img
+            id="ingameLogo"
+            src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2FLogo.png?v=1603642470720"
+            crossorigin="anonymous"
+          />
+          <img
+            class="ingameIcon"
+            id="botbottomIcon"
+            src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fuser%20icon.png?v=1603642469867"
+            crossorigin="anonymous"
+          />
+          <p id="bottomUsername">
+            Username
+          </p>
+        </div>
+      </div>
+
+      <div id="enter">
+        <div id="enterMenu">
+          <div id="enterBack"></div>
+          <img
+            id="logoEnter"
+            src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2FLogo.png?v=1603642470720"
+            crossorigin="anonymous"
+          />
+          <!--<h1 id="title">
+            PH706
+          </h1>-->
+          <img id="subtitle" src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ficons-17.png?v=1603803447722" />
+
+          <div id="instructions">
+            <div class="instructionInline">
+              <img
+              class="iconEnter"
+              id="headphoneIcon"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ficons%20new-07.png?v=1603796414128"
+              crossorigin="anonymous"
+              />
+              <img class="textInstruction" src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ftext-12.png?v=1603651878006"/>
+            </div>
+            
+            <div class="instructionInline">
+              <img
+              class="iconEnter"
+              id="arrowIcon"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ficons%20new%201-18.png?v=1603796416095"
+              crossorigin="anonymous"
+              />
+              <img class="textInstruction" src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ftext-13.png?v=1603651877894"/>
+            </div>
+            
+            <div class="instructionInline">
+              <img
+              class="iconEnter"
+              id="micIcon"
+              src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ficons%20new%201-19.png?v=1603796414216"
+              crossorigin="anonymous"
+              />
+              <img class="textInstruction" src="https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Ftext-14.png?v=1603651877894"/>
+            </div>
+            
+          </div>
+
+          <div id="enterName">
+            <input
+              id="firstUsername"
+              type="text"
+              class="enterContent"
+              placeholder="Write your Username here!"
+              tabindex="1"
+            />
+            <button
+              id="enterButton"
+              class="enterContent"
+              onclick="changeUsernameFirst()"
+            >
+              To party!
+            </button>
+          </div>
+        </div>
+        <a class="instaLogo" href="https://www.instagram.com/ph7.0.6/" target="_blank">
+          <img
+            class="instaLogo"
+            src="https://cdn.glitch.com/0e65d536-0425-4e6e-8059-1247674b938e%2Finstagram-3.png?v=1592566394569"
+            crossorigin="anonymous"
+          />
+        </a>
+      </div>
+      
+      <div id="enterOverlay">
+        
+      </div>
+      
+      <div id="exit">
+        <div id="exitOverlay">
+          
+        </div>
+      </div>
+      
+    </div>
+    
+    <script>
+    
+      window.addEventListener('load', function(){
+        
+        let enterFade = document.getElementById('enterOverlay');
+        
+        enterFade.style.opacity = '0';
+        enterFade.addEventListener('transitionend', () => {enterFade.style.visibility = 'hidden';});
+      });
+      
+    </script>
+
+    <!--<script>
+    
+      document.getElementById('centerPiece').addEventListener('loaded', function () {
+        toggleMic();
+      })
+    
+    </script>-->
+
+    <!--SCHEMAS & MOBILE -->
+    <script>
+      // On mobile remove elements that are resource heavy
+      var isMobile = AFRAME.utils.device.isMobile();
+      var isVR = AFRAME.utils.device.checkHeadsetConnected();
+
+      if (isMobile || isVR) {
+        var particles = document.getElementById("particles");
+        particles.parentNode.removeChild(particles);
+
+        let light1 = document.getElementById("light1");
+        light1.parentNode.removeChild(light1);
+
+        let light2 = document.getElementById("light2");
+        light2.parentNode.removeChild(light2);
+
+        let light3 = document.getElementById("light3");
+        light3.parentNode.removeChild(light3);
+
+        let light4 = document.getElementById("light4");
+        light4.parentNode.removeChild(light4);
+
+        /*let scene = document.querySelector('a-scene');
+        let entities = scene.querySelectorAll('.animated');
+        console.log(entities);
+        /*entities.removeAttribute('animation');
+        
+        /*let animation = entities.getAttribute('animation').enabled;
+        console.log(entities);
+        animation.setAttribute('animation', 'enabled', false);
+        
+        let animationDouble = document.querySelectorAll('.doubleAnimated');
+        animationDouble.setAttribute('animation', 'enabled', false);
+        animationDouble.setAttribute('animation__2', 'enabled', false);*/
+      }
+
+      // Define custom schema for syncing avatar color, set by random-color
+      NAF.schemas.add({
+        template: "#head-template",
+        components: [
+          "position",
+          "rotation",
+          {
+            selector: ".avatar",
+            component: "networked-audio-source",
+            property: "refDistance"
+          },
+          {
+            selector: ".nametag",
+            component: "text",
+            property: "value"
+          },
+          {
+            selector: ".chattext",
+            component: "text",
+            property: "value"
+          }
+        ]
+      });
+
+      NAF.schemas.add({
+        template: "#player-template",
+        components: ["position", "rotation"]
+      });
+    </script>
+
+    <!--AUDIO ICON -->
+    <script>
+      let button = document.getElementById("myButton");
+      let icon = document.getElementById("muteIcon");
+      localStorage.setItem("audiortc", 0);
+      let audiortc = localStorage.getItem("audiortc");
+      console.log(audiortc);
+
+      function checkMic() {
+        if (audiortc == 0) {
+          easyrtc.enableMicrophone(false);
+          localStorage.setItem("audiortc", 0);
+          audiortc = 0;
+          console.log(audiortc);
+          button.innerHTML = "Unmute";
+          icon.src =
+            "https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fmaikefeng-jingyin-2.png?v=1603802144461";
+        } else {
+          easyrtc.enableMicrophone(true);
+          localStorage.setItem("audiortc", 1);
+          audiortc = 1;
+          console.log(audiortc);
+          button.innerHTML = "Mute";
+          icon.src =
+            "https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fmaikefeng-2.png?v=1603802144461";
+        }
+      }
+      
+      function toggleMic() {
+        if (audiortc == 1) {
+          easyrtc.enableMicrophone(false);
+          localStorage.setItem("audiortc", 0);
+          audiortc = 0;
+          console.log(audiortc);
+          button.innerHTML = "Unmute";
+          icon.src =
+            "https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fmaikefeng-jingyin-2.png?v=1603802144461";
+        } else {
+          easyrtc.enableMicrophone(true);
+          localStorage.setItem("audiortc", 1);
+          audiortc = 1;
+          console.log(audiortc);
+          button.innerHTML = "Mute";
+          icon.src =
+            "https://cdn.glitch.com/f44e7d0f-6299-4434-a136-b24515e92365%2Fmaikefeng-2.png?v=1603802144461";
+        }
+      }
+    </script>
+
+    <!--USERNAME-->
+    <script>
+      //let username = prompt("What's you name mtf", "default");
+
+      let username = sessionStorage.getItem("username");
+      console.log("your username is " + username);
+
+      let player = document.getElementById("player");
+      let nametag = player.querySelector(".nametag");
+      //nametag.setAttribute('text', 'value', username);
+
+      let yourName = document.getElementById("userName");
+      let bottomName = document.getElementById("bottomUsername");
+
+      //let greeting = document.getElementById("subtitle");
+      //greeting.innerHTML += " " + username + ".";
+      
+      
+      console.log("firstInput = " + username);
+      
+      if (username != ("" || null)){
+      
+        document.getElementById("firstUsername").setAttribute("placeholder", username);
+      
+      };
+
+      function changeUsernameFirst() {
+        
+        var firstInput = document.getElementById("firstUsername").value;
+        
+        let uitop = document.getElementById("ingameUItop");
+        let uibottom = document.getElementById("ingameUIbottom");
+
+        var enter = document.getElementById("enter");
+        
+        if (firstInput != ""){
+      
+          
+          sessionStorage.setItem("username", firstInput);
+          
+          nametag.setAttribute("text", "value", firstInput);
+
+
+          yourName.setAttribute("placeholder", firstInput);
+          bottomName.innerHTML = firstInput;
+          enter.style.display = "none";
+          uitop.style.display = "flex";
+          uibottom.style.display = "flex";
+        }else{
+        
+
+          nametag.setAttribute("text", "value", username);
+
+
+          yourName.setAttribute("placeholder", username);
+          bottomName.innerHTML = username;
+          enter.style.display = "none";
+          uitop.style.display = "flex";
+          uibottom.style.display = "flex";
+        };
+
+        checkMic();
+      }
+
+      function changeUsername() {
+        let userName = document.getElementById("userName");
+        var input = userName.value;
+        var visible = userName.style.display;
+
+        if (visible == "none") {
+          console.log(visible);
+          userName.style.display = "inline";
+        } else {
+          console.log(visible);
+          nametag.setAttribute("text", "value", input);
+          bottomName.innerHTML = input;
+          userName.style.display = "none";
+          sessionStorage.setItem("username", input);
+          console.log("your username is " + input);
+        }
+      }
+    </script>
+    
+    <!--CHAT-->
+    <script>
+      let chattext = player.querySelector(".chattext");
+
+      let chatBox = document.getElementById("chatBox");
+
+      function sendMessage() {
+        let message = chatBox.value;
+        chattext.setAttribute("text", "value", message);
+
+        chatBox.value = "";
+        setTimeout(function deleteMessage() {
+          chattext.setAttribute("text", "value", "");
+        }, 4000);
+      }
+    </script>
+
+    <!-- CENTER SPAM -->
+
+    <!--<script>
+      
+
+      function sendMessageCenter() {
+        
+        var centerMessage = document.querySelectorAll(".centerMessage");
+
+      let chatCenter = document.getElementById("chatCenter");
+        
+        for (var i = 0; i < centerMessage.length; i++) {
+        console.log(centerMessage.length);
+
+        let messageCenter = chatCenter.value;
+        centerMessage[i].setAttribute("text", "value", messageCenter);
+
+        chatCenter.value = "";
+        setTimeout(function deleteMessage() {
+          centerMessage.setAttribute("text", "value", "");
+        }, 4000);
+      };
+      };
+    </script>-->
+
+    <!-- FULL SCREEN -->
+    <script>
+      function toggleFullScreen() {
+        var doc = window.document;
+        var docEl = doc.documentElement;
+
+        var requestFullScreen =
+          docEl.requestFullscreen ||
+          docEl.mozRequestFullScreen ||
+          docEl.webkitRequestFullScreen ||
+          docEl.msRequestFullscreen;
+        var cancelFullScreen =
+          doc.exitFullscreen ||
+          doc.mozCancelFullScreen ||
+          doc.webkitExitFullscreen ||
+          doc.msExitFullscreen;
+
+        let FSbutton = document.getElementById("FSbutton");
+
+        if (
+          !doc.fullscreenElement &&
+          !doc.mozFullScreenElement &&
+          !doc.webkitFullscreenElement &&
+          !doc.msFullscreenElement
+        ) {
+          requestFullScreen.call(docEl);
+          FSbutton.src =
+            "https://cdn.glitch.com/0e65d536-0425-4e6e-8059-1247674b938e%2Fback%20fullscreen.png?v=1592571348479";
+        } else {
+          cancelFullScreen.call(doc);
+          FSbutton.src =
+            "https://cdn.glitch.com/0e65d536-0425-4e6e-8059-1247674b938e%2Ffullscreen.png?v=1592571348624";
+        }
+      }
+    </script>
+
+    <!-- FLY 
+    <script>
+      function fly() {
+        let flyMode = player.getAttribute("movement-controls").fly;
+        console.log(flyMode);
+
+        if (flyMode == false) {
+          player.setAttribute("movement-controls", "fly", true);
+        } else {
+          player.setAttribute("movement-controls", "fly", false);
+        }
+      }
+    </script>-->
+  </body>
+</html>
